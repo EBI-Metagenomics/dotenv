@@ -51,6 +51,27 @@ should print
 Hello, world!
 ```
 
+## API
+
+It consists in a single function:
+
+```c
+enum dotenv_rc dotenv_load(char const *path, bool override);
+```
+
+- `path` can be either a directory path, in which case it will try to read from
+  file `.env` inside it, or a direct path to an actual file.
+- `override` determine whether existing environment variables will be overwritten
+  by the ones in the `.env` file.
+
+The returning codes will be one of the following:
+
+- `DOTENV_OK`: Success!
+- `DOTENV_EIO`: I/O error.
+- `DOTENV_EPARSE`: Failed to parse `.env` file.
+- `DOTENV_ESETENV`: Failed to set environment variable.
+- `DOTENV_ELONGPATH`: Path is too long.
+
 ## Testing it
 
 Enter

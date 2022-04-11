@@ -1,7 +1,6 @@
 #include "dotenv.h"
 #define _POSIX_C_SOURCE 200112L
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -215,7 +214,7 @@ static enum dotenv_rc setup_path(char const *path)
     return DOTENV_OK;
 }
 
-enum dotenv_rc dotenv_load(char const *path, int override)
+enum dotenv_rc dotenv_load(char const *path, bool override)
 {
     int rc = setup_path(path);
     if (rc) return rc;
