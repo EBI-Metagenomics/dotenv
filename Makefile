@@ -10,7 +10,7 @@ test_dotenv: $(OBJECTS) test.valid.env
 	$(CC) $(OBJECTS) -o test
 
 
-test: test_dotenv
+check: test_dotenv
 	./test
 
 .PHONY: clean
