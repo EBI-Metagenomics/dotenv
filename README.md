@@ -80,7 +80,15 @@ Enter
 make check
 ```
 
+## Author
+
+* [Danilo Horta](https://github.com/horta)
+
+## License
+
+This project is licensed under the [MIT License](https://raw.githubusercontent.com/EBI-Metagenomics/dotenv/main/LICENSE).
+
 ## Acknowledgments
 
-- [dotenv for c](https://github.com/Isty001/dotenv-c)
-- [python-dotenv](https://github.com/theskumar/python-dotenv)
+* [dotenv for c](https://github.com/Isty001/dotenv-c)
+* [python-dotenv](https://github.com/theskumar/python-dotenv)
