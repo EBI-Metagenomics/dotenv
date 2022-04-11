@@ -6,7 +6,7 @@ OBJECTS := dotenv.o test_dotenv.o
 %.o : %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
-test_dotenv: $(OBJECTS) test.valid.env
+test_dotenv: $(OBJECTS) assets/.env assets/test.valid.env
 	$(CC) $(OBJECTS) -o test
 
 

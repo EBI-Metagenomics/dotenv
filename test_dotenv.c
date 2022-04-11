@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-void die(char const *restrict fmt, ...)
+#define ASSETS "assets"
+
+static void die(char const *restrict fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -15,7 +17,7 @@ void die(char const *restrict fmt, ...)
     exit(EXIT_FAILURE);
 }
 
-void expect(char const *name, char const *expected_value)
+static void expect(char const *name, char const *expected_value)
 {
     char *value = getenv(name);
     if (!value) die("Unexpected `NULL` value.");
@@ -24,9 +26,15 @@ void expect(char const *name, char const *expected_value)
         die("Expected `%s` but got `%s`.", expected_value, value);
 }
 
-int main(void)
+static void test_env(void)
 {
-    int rc = dotenv_load("test.valid.env");
+    int rc = dotenv_load(ASSETS);
+    if (rc) die("Failed with code %d.", rc);
+}
+
+static void test_valid_env(void)
+{
+    int rc = dotenv_load(ASSETS "/test.valid.env");
     if (rc) die("Failed with code %d.", rc);
 
     expect("FOO1", "foπo1#ffe");
@@ -45,7 +53,12 @@ int main(void)
     expect("EMAIL", "${USER}@example.org");
     expect("DATABASE_URL", "postgres://${USER}@localhost/my_database");
     expect("CACHE_DIR", "${PWD}/cache");
+}
 
+int main(void)
+{
+    test_env();
+    test_valid_env();
     printf("All tests have passed!\n");
     return EXIT_SUCCESS;
 }
