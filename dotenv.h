@@ -10,6 +10,6 @@ enum dotenv_rc
     DOTENV_ELONGPATH,
 };
 
-enum dotenv_rc dotenv_load(char const *path);
+enum dotenv_rc dotenv_load(char const *path, int override);
 
 #endif

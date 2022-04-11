@@ -1,6 +1,7 @@
 #include "dotenv.h"
 #define _POSIX_C_SOURCE 200112L
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,19 +9,17 @@
 
 #define ENDFILE -1
 
-enum limits
-{
-    LINE_SIZE = 2048,
-};
-
 #ifndef PATH_MAX
 #define PATH_MAX 4096
 #endif
 
+#define LINE_MAX 4096
+
 struct
 {
     char path[PATH_MAX];
-    char line[LINE_SIZE];
+    char line[LINE_MAX];
+    bool override;
     char *name;
     char *value;
 } self = {0};
@@ -94,7 +93,7 @@ static size_t dotenv_strlcat(char *dst, const char *src, size_t dsize)
     return (dlen + (src - osrc)); /* count does not include NUL */
 }
 
-static int is_directory(char const *path)
+static bool is_directory(char const *path)
 {
     struct stat sb = {0};
     return (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode));
@@ -102,7 +101,7 @@ static int is_directory(char const *path)
 
 static int next_line(FILE *fp)
 {
-    if (!fgets(self.line, LINE_SIZE - 1, fp))
+    if (!fgets(self.line, LINE_MAX - 1, fp))
     {
         if (feof(fp)) return ENDFILE;
 
@@ -197,7 +196,7 @@ static enum dotenv_rc parse_file(FILE *fp)
         rc = parse_value(p + 1);
         if (rc) return rc;
 
-        if (setenv(self.name, self.value, 1)) return DOTENV_ESETENV;
+        if (setenv(self.name, self.value, self.override)) return DOTENV_ESETENV;
     }
 
     return rc == ENDFILE ? DOTENV_OK : rc;
@@ -216,10 +215,12 @@ static enum dotenv_rc setup_path(char const *path)
     return DOTENV_OK;
 }
 
-enum dotenv_rc dotenv_load(char const *path)
+enum dotenv_rc dotenv_load(char const *path, int override)
 {
     int rc = setup_path(path);
     if (rc) return rc;
+
+    self.override = override;
 
     FILE *fp = fopen(self.path, "r");
     if (!fp) return DOTENV_EIO;

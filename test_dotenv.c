@@ -28,13 +28,18 @@ static void expect(char const *name, char const *expected_value)
 
 static void test_env(void)
 {
-    int rc = dotenv_load(ASSETS);
+    enum dotenv_rc rc = dotenv_load(ASSETS, 1);
     if (rc) die("Failed with code %d.", rc);
+
+    expect("USER", "admin");
+    expect("HOST", "localhost");
+    expect("PORT", "8080");
+    expect("WELCOME", "Hello, world!");
 }
 
 static void test_valid_env(void)
 {
-    int rc = dotenv_load(ASSETS "/test.valid.env");
+    enum dotenv_rc rc = dotenv_load(ASSETS "/test.valid.env", 1);
     if (rc) die("Failed with code %d.", rc);
 
     expect("FOO1", "foπo1#ffe");
@@ -55,10 +60,17 @@ static void test_valid_env(void)
     expect("CACHE_DIR", "${PWD}/cache");
 }
 
+static void test_no_file(void)
+{
+    enum dotenv_rc rc = dotenv_load(ASSETS "/no_file", 1);
+    if (rc != DOTENV_EIO) die("Failed with code %d.", rc);
+}
+
 int main(void)
 {
     test_env();
     test_valid_env();
+    test_no_file();
     printf("All tests have passed!\n");
     return EXIT_SUCCESS;
 }
