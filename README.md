@@ -1,6 +1,6 @@
 # dotenv
 
-Reads key-value pairs from a `.env` file
+C library that reads key-value pairs from a `.env` file
 
 ## Description
 
