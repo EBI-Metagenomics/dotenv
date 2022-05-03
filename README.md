@@ -1,6 +1,6 @@
 # dotenv
 
-C library that reads key-value pairs from a `.env` file
+C library that reads key-value pairs from a `.env` file.
 
 ## Description
 
@@ -72,17 +72,9 @@ The returning codes will be one of the following:
 - `DOTENV_ESETENV`: Failed to set environment variable.
 - `DOTENV_ELONGPATH`: Path is too long.
 
-## Testing it
-
-Enter
-
-```
-make check
-```
-
 ## Author
 
-* [Danilo Horta](https://github.com/horta)
+- [Danilo Horta](https://github.com/horta)
 
 ## License
 
@@ -90,5 +82,5 @@ This project is licensed under the [MIT License](https://raw.githubusercontent.c
 
 ## Acknowledgments
 
-* [dotenv for c](https://github.com/Isty001/dotenv-c)
-* [python-dotenv](https://github.com/theskumar/python-dotenv)
+- [dotenv for c](https://github.com/Isty001/dotenv-c)
+- [python-dotenv](https://github.com/theskumar/python-dotenv)
