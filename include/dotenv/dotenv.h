@@ -1,6 +1,7 @@
 #ifndef DOTENV_H
 #define DOTENV_H
 
+#include "dotenv/export.h"
 #include <stdbool.h>
 
 enum dotenv_rc
@@ -12,6 +13,6 @@ enum dotenv_rc
     DOTENV_ELONGPATH,
 };
 
-enum dotenv_rc dotenv_load(char const *path, bool override);
+DOTENV_EXPORT enum dotenv_rc dotenv_load(char const *path, bool override);
 
 #endif
