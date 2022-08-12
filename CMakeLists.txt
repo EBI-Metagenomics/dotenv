@@ -2,8 +2,23 @@ cmake_minimum_required(VERSION 3.16.3 FATAL_ERROR)
 
 project(
   dotenv
-  VERSION 0.1.0
+  VERSION 0.1.1
   LANGUAGES C)
+
+set(DOTENV_MAIN_PROJECT OFF)
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+  set(DOTENV_MAIN_PROJECT ON)
+endif()
+
+if(DOTENV_MAIN_PROJECT)
+  set(DOTENV_BUILD_TESTS_DEFAULT ON)
+else()
+  set(DOTENV_BUILD_TESTS_DEFAULT OFF)
+endif()
+
+option(DOTENV_BUILD_TESTS "Build the unit tests" ${DOTENV_BUILD_TESTS_DEFAULT})
+message(STATUS "DOTENV_MAIN_PROJECT: " ${DOTENV_MAIN_PROJECT})
+message(STATUS "DOTENV_BUILD_TESTS: " ${DOTENV_BUILD_TESTS})
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -49,8 +64,10 @@ install(FILES ${EXPORT_FILE} ${CONFIG_FILE} DESTINATION include/dotenv)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md
               ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE DESTINATION share/docs/dotenv)
 
-enable_testing()
-add_subdirectory(test)
+if(DOTENV_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(test)
+endif()
 
 set(CPACK_PACKAGE_NAME dotenv)
 set(CPACK_PACKAGE_VENDOR "Danilo Horta")
