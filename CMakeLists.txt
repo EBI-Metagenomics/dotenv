@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.3 FATAL_ERROR)
 
 project(
   dotenv
-  VERSION 0.1.1
+  VERSION 0.1.2
   LANGUAGES C)
 
 set(DOTENV_MAIN_PROJECT OFF)
