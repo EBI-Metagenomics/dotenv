@@ -4,15 +4,15 @@
 #include "dotenv/export.h"
 #include <stdbool.h>
 
-enum dotenv_rc
+typedef enum
 {
     DOTENV_OK,
     DOTENV_EIO,
     DOTENV_EPARSE,
     DOTENV_ESETENV,
     DOTENV_ELONGPATH,
-};
+} dotenv_rc;
 
-DOTENV_EXPORT enum dotenv_rc dotenv_load(char const *path, bool override);
+DOTENV_EXPORT dotenv_rc dotenv_load(char const *path, bool override_env);
 
 #endif

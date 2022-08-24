@@ -26,7 +26,7 @@ static void expect(char const *name, char const *expected_value)
 
 static void test_env(void)
 {
-    enum dotenv_rc rc = dotenv_load(ASSETS, 1);
+    dotenv_rc rc = dotenv_load(ASSETS, 1);
     if (rc) die("Failed with code %d.", rc);
 
     expect("USER", "admin");
@@ -37,7 +37,7 @@ static void test_env(void)
 
 static void test_valid_env(void)
 {
-    enum dotenv_rc rc = dotenv_load(ASSETS "/test.valid.env", 1);
+    dotenv_rc rc = dotenv_load(ASSETS "/test.valid.env", 1);
     if (rc) die("Failed with code %d.", rc);
 
     expect("FOO1", "foπo1#ffe");
@@ -60,7 +60,7 @@ static void test_valid_env(void)
 
 static void test_no_file(void)
 {
-    enum dotenv_rc rc = dotenv_load(ASSETS "/no_file", 1);
+    dotenv_rc rc = dotenv_load(ASSETS "/no_file", 1);
     if (rc != DOTENV_EIO) die("Failed with code %d.", rc);
 }
 

@@ -112,7 +112,7 @@ static int next_line(FILE *fp)
     return DOTENV_OK;
 }
 
-static enum dotenv_rc expect_spaces_or_comment(char const *p)
+static dotenv_rc expect_spaces_or_comment(char const *p)
 {
     while (*p)
     {
@@ -123,7 +123,7 @@ static enum dotenv_rc expect_spaces_or_comment(char const *p)
     return DOTENV_OK;
 }
 
-static enum dotenv_rc parse_name(char *p, char **end)
+static dotenv_rc parse_name(char *p, char **end)
 {
     while (isspace(*p))
         ++p;
@@ -152,7 +152,7 @@ static enum dotenv_rc parse_name(char *p, char **end)
     return DOTENV_EPARSE;
 }
 
-static enum dotenv_rc parse_value(char *p)
+static dotenv_rc parse_value(char *p)
 {
     if (*p == '"')
     {
@@ -182,7 +182,7 @@ static enum dotenv_rc parse_value(char *p)
     return expect_spaces_or_comment(p + 1);
 }
 
-static enum dotenv_rc parse_file(FILE *fp)
+static dotenv_rc parse_file(FILE *fp)
 {
     int rc = DOTENV_OK;
     while (!(rc = next_line(fp)))
@@ -201,7 +201,7 @@ static enum dotenv_rc parse_file(FILE *fp)
     return rc == ENDFILE ? DOTENV_OK : rc;
 }
 
-static enum dotenv_rc setup_path(char const *path)
+static dotenv_rc setup_path(char const *path)
 {
     if (dotenv_strlcpy(self.path, path, PATH_MAX) >= PATH_MAX)
         return DOTENV_ELONGPATH;
@@ -214,12 +214,12 @@ static enum dotenv_rc setup_path(char const *path)
     return DOTENV_OK;
 }
 
-enum dotenv_rc dotenv_load(char const *path, bool override)
+dotenv_rc dotenv_load(char const *path, bool override_env)
 {
     int rc = setup_path(path);
     if (rc) return rc;
 
-    self.override = override;
+    self.override = override_env;
 
     FILE *fp = fopen(self.path, "r");
     if (!fp) return DOTENV_EIO;
