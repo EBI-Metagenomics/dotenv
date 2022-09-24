@@ -8,7 +8,7 @@
 
 static void test_env(void)
 {
-    dotenv_rc rc = dotenv_load("assets", 1);
+    int rc = dotenv_load("assets", 1);
     ok(!rc);
 
     is(getenv("USER"), "admin");
@@ -19,7 +19,7 @@ static void test_env(void)
 
 static void test_valid_env(void)
 {
-    dotenv_rc rc = dotenv_load("assets/test.valid.env", 1);
+    int rc = dotenv_load("assets/test.valid.env", 1);
     ok(!rc);
 
     is(getenv("FOO1"), "foπo1#ffe");
@@ -42,7 +42,7 @@ static void test_valid_env(void)
 
 static void test_no_file(void)
 {
-    dotenv_rc rc = dotenv_load("assets/no_file", 1);
+    int rc = dotenv_load("assets/no_file", 1);
     ok(rc == DOTENV_EIO);
 }
 
