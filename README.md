@@ -36,10 +36,11 @@ Running
 // For getenv
 #define _POSIX_C_SOURCE 200112L
 #include <stdlib.h>
+#include <stdbool.h>
 
 int main(void)
 {
-    dotenv_load(".", 1);
+    dotenv_load(".", true);
     printf("Hello, %s\n", getenv("HELLO"));
     return 0;
 }
@@ -56,7 +57,7 @@ Hello, world!
 It consists in a single function:
 
 ```c
-enum dotenv_rc dotenv_load(char const *path, bool override);
+int dotenv_load(char const *path, bool override);
 ```
 
 - `path` can be either a directory path, in which case it will try to read from
