@@ -6,18 +6,16 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#define ENDFILE -1
-
-#ifndef PATH_MAX
-#define PATH_MAX 4096
-#endif
-
-#define LINE_MAX 4096
-
-struct
+enum
 {
-    char path[PATH_MAX];
-    char line[LINE_MAX];
+    ENDFILE = -1,
+    LINE_SIZE = 2 * FILENAME_MAX,
+};
+
+static struct
+{
+    char path[FILENAME_MAX];
+    char line[LINE_SIZE];
     bool override;
     char *name;
     char *value;
@@ -100,7 +98,7 @@ static bool is_directory(char const *path)
 
 static int next_line(FILE *fp)
 {
-    if (!fgets(self.line, LINE_MAX - 1, fp))
+    if (!fgets(self.line, LINE_SIZE - 1, fp))
     {
         if (feof(fp)) return ENDFILE;
 
@@ -112,7 +110,7 @@ static int next_line(FILE *fp)
     return DOTENV_OK;
 }
 
-static dotenv_rc expect_spaces_or_comment(char const *p)
+static int expect_spaces_or_comment(char const *p)
 {
     while (*p)
     {
@@ -123,7 +121,7 @@ static dotenv_rc expect_spaces_or_comment(char const *p)
     return DOTENV_OK;
 }
 
-static dotenv_rc parse_name(char *p, char **end)
+static int parse_name(char *p, char **end)
 {
     while (isspace(*p))
         ++p;
@@ -152,7 +150,7 @@ static dotenv_rc parse_name(char *p, char **end)
     return DOTENV_EPARSE;
 }
 
-static dotenv_rc parse_value(char *p)
+static int parse_value(char *p)
 {
     if (*p == '"')
     {
@@ -182,7 +180,7 @@ static dotenv_rc parse_value(char *p)
     return expect_spaces_or_comment(p + 1);
 }
 
-static dotenv_rc parse_file(FILE *fp)
+static int parse_file(FILE *fp)
 {
     int rc = DOTENV_OK;
     while (!(rc = next_line(fp)))
@@ -201,25 +199,25 @@ static dotenv_rc parse_file(FILE *fp)
     return rc == ENDFILE ? DOTENV_OK : rc;
 }
 
-static dotenv_rc setup_path(char const *path)
+static int setup_path(char const *path)
 {
-    if (dotenv_strlcpy(self.path, path, PATH_MAX) >= PATH_MAX)
+    if (dotenv_strlcpy(self.path, path, FILENAME_MAX) >= FILENAME_MAX)
         return DOTENV_ELONGPATH;
 
     if (is_directory(self.path))
     {
-        if (dotenv_strlcat(self.path, "/.env", PATH_MAX) >= PATH_MAX)
+        if (dotenv_strlcat(self.path, "/.env", FILENAME_MAX) >= FILENAME_MAX)
             return DOTENV_ELONGPATH;
     }
     return DOTENV_OK;
 }
 
-dotenv_rc dotenv_load(char const *path, bool override_env)
+int dotenv_load(char const *path, bool override)
 {
     int rc = setup_path(path);
     if (rc) return rc;
 
-    self.override = override_env;
+    self.override = override;
 
     FILE *fp = fopen(self.path, "r");
     if (!fp) return DOTENV_EIO;

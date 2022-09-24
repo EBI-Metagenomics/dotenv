@@ -3,15 +3,15 @@
 
 #include <stdbool.h>
 
-typedef enum
+enum dotenv_rc
 {
     DOTENV_OK,
     DOTENV_EIO,
     DOTENV_EPARSE,
     DOTENV_ESETENV,
     DOTENV_ELONGPATH,
-} dotenv_rc;
+};
 
-dotenv_rc dotenv_load(char const *path, bool override_env);
+int dotenv_load(char const *path, bool override);
 
 #endif
