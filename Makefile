@@ -1,6 +1,6 @@
 .POSIX:
 
-VERSION := 1.0.0
+VERSION := 1.0.1
 TAP_VERSION := 0.1.0
 TAP_URL := https://github.com/zorgnax/libtap/archive/refs/tags/$(TAP_VERSION).tar.gz
 

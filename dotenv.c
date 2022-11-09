@@ -1,5 +1,7 @@
 #include "dotenv.h"
+#if !defined(_POSIX_C_SOURCE) || _POSIX_C_SOURCE < 200112L
 #define _POSIX_C_SOURCE 200112L
+#endif
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
